@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 import CustomerControllers from '../controllers/CustomerControllers';
+import SearchCustomerControllers from '../controllers/SearchCustomerControllers';
 
 const customersRoute = Router();
 const customerControllers = new CustomerControllers();
+const searchCustomerControllers = new SearchCustomerControllers();
 
 customersRoute.post(
   '/',
@@ -22,7 +24,7 @@ customersRoute.post(
 );
 
 customersRoute.get(
-  '/:id',
+  '/find/:id',
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.string().required(),
@@ -60,14 +62,16 @@ customersRoute.delete(
   customerControllers.delete,
 );
 
+customersRoute.get('/', customerControllers.index);
+
 customersRoute.get(
-  '/',
+  '/search',
   celebrate({
     [Segments.QUERY]: {
       search: Joi.string().required(),
     },
   }),
-  customerControllers.index,
+  searchCustomerControllers.index,
 );
 
 export default customersRoute;

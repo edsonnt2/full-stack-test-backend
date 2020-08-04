@@ -4,7 +4,7 @@ import FakeCustomerRepository from '../repositories/fakes/FakeCustomerRepository
 let fakeCustomerRepository: FakeCustomerRepository;
 let findCustomerService: FindCustomerService;
 
-describe('FindCustomerById', () => {
+describe('FindCustomer', () => {
   beforeEach(() => {
     fakeCustomerRepository = new FakeCustomerRepository();
     findCustomerService = new FindCustomerService(fakeCustomerRepository);

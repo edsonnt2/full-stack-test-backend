@@ -14,7 +14,8 @@ export default interface ICustomerRepository {
     find,
   }: IFindByCustomerDTO): Promise<ICustomerModel | undefined>;
   findById(id: string): Promise<ICustomerModel | undefined>;
-  search(search: string): Promise<ICustomerModel[]>;
+  list(): Promise<ICustomerModel[]>;
   save(customer: ICustomerModel): Promise<void>;
   deleteById(id: string): Promise<void>;
+  search(search: string): Promise<ICustomerModel[]>;
 }

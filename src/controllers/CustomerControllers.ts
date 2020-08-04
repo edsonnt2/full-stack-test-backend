@@ -4,7 +4,7 @@ import CustomerRepository from '../database/repositories/CustomerRepository';
 import FindCustomerService from '../services/FindCustomerService';
 import EditCustomerService from '../services/EditCustomerService';
 import DeleteCustomerService from '../services/DeleteCustomerService';
-import SearchCustomerService from '../services/SearchCustomerService';
+import ListCustomerService from '../services/ListCustomerService';
 
 export default class CustomerControllers {
   public async create(req: Request, res: Response): Promise<Response> {
@@ -80,15 +80,11 @@ export default class CustomerControllers {
   }
 
   public async index(req: Request, res: Response): Promise<Response> {
-    const { search } = req.query;
-
     const customerRepository = new CustomerRepository();
-    const searchCustomerService = new SearchCustomerService(customerRepository);
+    const listCustomerService = new ListCustomerService(customerRepository);
 
     try {
-      const customers = await searchCustomerService.execute({
-        search: String(search),
-      });
+      const customers = await listCustomerService.execute();
 
       return res.json(customers);
     } catch (err) {

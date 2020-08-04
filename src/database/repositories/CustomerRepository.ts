@@ -31,6 +31,11 @@ class CustomerRepository implements ICustomerRepository {
     return customer || undefined;
   }
 
+  public async list(): Promise<ICustomerModel[]> {
+    const customers = await Customer.find();
+    return customers;
+  }
+
   public async search(search: string): Promise<ICustomerModel[]> {
     const newSearch = search.trim();
     const isNumber = search

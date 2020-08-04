@@ -33,6 +33,10 @@ class FakeCustomerRepository implements ICustomerRepository {
     return this.customers.find(findCustomer => findCustomer.id === id);
   }
 
+  public async list(): Promise<ICustomerModel[]> {
+    return this.customers;
+  }
+
   public async search(search: string): Promise<ICustomerModel[]> {
     const newSearch = search.trim();
     const isNumber = search
