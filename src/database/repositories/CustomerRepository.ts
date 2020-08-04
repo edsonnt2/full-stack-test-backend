@@ -33,11 +33,37 @@ class CustomerRepository implements ICustomerRepository {
 
   public async search(search: string): Promise<ICustomerModel[]> {
     const newSearch = search.trim();
+    const isNumber = search
+      .split('')
+      .filter(char => Number(char) || char === '0')
+      .join('');
     const filterCustomers = await Customer.find({
-      fullName: {
-        $regex: new RegExp(newSearch),
-        $options: 'i',
-      },
+      $or: [
+        {
+          fullName: {
+            $regex: new RegExp(newSearch),
+            $options: 'i',
+          },
+        },
+        {
+          'contact.email': {
+            $regex: new RegExp(newSearch),
+            $options: 'i',
+          },
+        },
+        {
+          'contact.phone': {
+            $regex: new RegExp(isNumber),
+            $options: 'i',
+          },
+        },
+        {
+          cpf: {
+            $regex: new RegExp(isNumber),
+            $options: 'i',
+          },
+        },
+      ],
     });
 
     return filterCustomers;

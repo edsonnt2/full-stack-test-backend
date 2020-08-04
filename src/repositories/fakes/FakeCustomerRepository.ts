@@ -35,8 +35,16 @@ class FakeCustomerRepository implements ICustomerRepository {
 
   public async search(search: string): Promise<ICustomerModel[]> {
     const newSearch = search.trim();
-    const filterCustomers = this.customers.filter(({ fullName }) =>
-      fullName.includes(newSearch),
+    const isNumber = search
+      .split('')
+      .filter(char => Number(char) || char === '0')
+      .join('');
+    const filterCustomers = this.customers.filter(
+      ({ fullName, cpf, contact: { email, phone } }) =>
+        fullName.includes(newSearch) ||
+        cpf.includes(isNumber) ||
+        email.includes(newSearch) ||
+        phone.includes(isNumber),
     );
 
     return filterCustomers;
