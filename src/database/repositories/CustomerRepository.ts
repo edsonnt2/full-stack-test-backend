@@ -42,20 +42,24 @@ class CustomerRepository implements ICustomerRepository {
       .split('')
       .filter(char => Number(char) || char === '0')
       .join('');
-    const filterCustomers = await Customer.find({
-      $or: [
-        {
-          fullName: {
-            $regex: new RegExp(newSearch),
-            $options: 'i',
-          },
+
+    const arrayOr: { [key: string]: { [key: string]: string | RegExp } }[] = [
+      {
+        fullName: {
+          $regex: new RegExp(newSearch),
+          $options: 'i',
         },
-        {
-          'contact.email': {
-            $regex: new RegExp(newSearch),
-            $options: 'i',
-          },
+      },
+      {
+        'contact.email': {
+          $regex: new RegExp(newSearch),
+          $options: 'i',
         },
+      },
+    ];
+
+    if (isNumber)
+      arrayOr.push(
         {
           'contact.phone': {
             $regex: new RegExp(isNumber),
@@ -68,7 +72,9 @@ class CustomerRepository implements ICustomerRepository {
             $options: 'i',
           },
         },
-      ],
+      );
+    const filterCustomers = await Customer.find({
+      $or: arrayOr,
     });
 
     return filterCustomers;
